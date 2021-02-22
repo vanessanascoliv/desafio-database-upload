@@ -5,7 +5,7 @@ export default class createTransaction1613930109422 implements MigrationInterfac
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name:'transacoes',
+                name:'transactions',
                 columns:[
                     {
                         name:'id',
@@ -15,12 +15,18 @@ export default class createTransaction1613930109422 implements MigrationInterfac
                         default:'uuid_generate_v4()',
                     },
                     {
+                        name:'title',
+                        type:'varchar',
+                    },
+                    {
                         name:'type',
                         type:'varchar',
                     },
                     {
-                        name:'value',
-                        type:'numeric',
+                        name: 'value',
+                        type: 'decimal',
+                        precision: 10,
+                        scale: 2,
                     },
                     {
                         name:'category_id',
@@ -57,7 +63,9 @@ export default class createTransaction1613930109422 implements MigrationInterfac
     }
 
     public  async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('transacoes');
+        await queryRunner.dropForeignKey('transactions', 'TransactionCategory');
+
+    await queryRunner.dropTable('transactions');
     }
 
 }
